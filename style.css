@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap');
+
+:root {
+  --color-desaturated-red: hsl(0, 36%, 70%);
+  --color-soft-red: hsl(0, 93%, 68%);
+  --color-dark-grayish-red: hsl(0, 6%, 24%);
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  font-family: 'Josefin Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  background: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(0, 100%, 98%));
+}
+
+.container {
+  max-width: 144rem;
+  width: 100%;
+  background-image: linear-gradient(
+    135deg,
+    from hsl(0, 80%, 86%),
+    to hsl(0, 74%, 74%)
+  );
+
+  display: flex;
+}
+
+.content-container {
+  width: 57.5%;
+  background-image: url(./images/bg-pattern-desktop.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 8vw 15vw 8vw 10vw;
+  padding-right: 22rem;
+}
+
+.image-container {
+  width: 42.5%;
+  background-image: url(./images/hero-desktop.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.logo {
+  margin-bottom: 11rem;
+}
+
+.content-heading {
+  line-height: 1.1;
+  text-transform: uppercase;
+  font-size: 6.5rem;
+  letter-spacing: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.heading-alt {
+  font-weight: 200;
+  color: var(--color-desaturated-red);
+}
+
+.content-text {
+  color: var(--color-desaturated-red);
+  margin-bottom: 3.2rem;
+}
+
+.form-input {
+  font-family: inherit;
+  border: 1px solid var(--color-desaturated-red);
+  background: transparent;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  border-radius: 8rem;
+  font-size: 1.6rem;
+}
+
+.content-form {
+  position: relative;
+}
+
+.form-input::placeholder {
+  color: var(--color-desaturated-red);
+}
+
+.form-input:focus {
+  outline: none;
+}
+
+.btn {
+  cursor: pointer;
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  padding: 1.8rem 2.5rem;
+  border-radius: 8rem;
+  width: 10.5rem;
+  border: none;
+  box-shadow: 0 1.5rem 1.6rem rgba(0, 0, 0, 0.17);
+  background: linear-gradient(135deg, hsl(0, 80%, 86%), hsl(0, 74%, 74%));
+}
+
+.btn:active {
+  background: hsl(0, 80%, 86%);
+  transform: scale(1.05);
+}
+
+.error-icon,
+.error-msg {
+  display: none;
+}
+
+.content-form.error .error-icon {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10vw;
+}
+
+.content-form.error .error-msg {
+  display: inline-block;
+  position: absolute;
+  left: 2.5rem;
+  bottom: -55%;
+  font-size: 1.5rem;
+  color: var(--color-soft-red);
+}
+
+.content-form.error .form-input {
+  border: 2px solid var(--color-soft-red);
+}
+
+@media only screen and (min-width: 90em) {
+  .content-container {
+    padding: 11rem 22rem 11rem 14rem;
+  }
+
+  .content-form.error .error-icon {
+    left: 32rem;
+  }
+}
+
+/* @media only screen and (max-width: 78.125em) {
+ 
+} */
+
+@media only screen and (max-width: 78.125em) {
+  html {
+    font-size: 56.25%;
+  }
+
+  .content-heading {
+    font-size: 5.5rem;
+  }
+
+  .logo {
+    margin-bottom: 8rem;
+  }
+}
+
+@media only screen and (max-width: 62.5em) {
+  .content-container {
+    padding-right: 10vw;
+  }
+  .content-heading {
+    font-size: 5rem;
+    letter-spacing: 1rem;
+  }
+}
+
+@media only screen and (max-width: 50em) {
+  .container {
+    flex-direction: column-reverse;
+    width: 375px;
+    height: 100vh;
+    background-image: linear-gradient(hsl(0, 0%, 100%), hsl(0, 100%, 98%));
+    position: relative;
+  }
+
+  .content-container {
+    width: 100%;
+    padding: 3rem 3rem 8rem 3rem;
+    background-image: none;
+  }
+
+  .logo {
+    position: absolute;
+    top: 5%;
+  }
+  .logo img {
+    width: 15rem;
+  }
+
+  .content-container > *:not(:first-child) {
+    text-align: center;
+  }
+
+  .image-container {
+    width: 100%;
+    height: 100%;
+    height: 25rem;
+    background-image: url(./images/hero-mobile.jpg);
+    background-size: cover;
+    background-position: center center;
+    position: absolute;
+    top: 15%;
+  }
+
+  .content-form.error .error-icon {
+    left: 23rem;
+  }
+  .btn {
+    width: 8rem;
+  }
+}
