@@ -1,3 +1,5 @@
+import './style.css';
+
 const btn = document.querySelector('.btn');
 const errorMsg = document.querySelector('.error-msg');
 const errorIcon = document.querySelector('.error-icon');
