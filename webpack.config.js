@@ -2,6 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = !isDev;
 
 const cssLoaders = (extra) => {
   const loaders = [MiniCssExtractPlugin.loader, 'css-loader'];
@@ -11,6 +17,68 @@ const cssLoaders = (extra) => {
   }
 
   return loaders;
+};
+
+const babelOptions = (preset) => {
+  const opts = {
+    presets: ['@babel/preset-env'],
+    plugins: ['@babel/plugin-proposal-class-properties'],
+  };
+
+  if (preset) {
+    opts.presets.push(preset);
+  }
+
+  return opts;
+};
+
+const jsLoaders = () => {
+  const loaders = [
+    {
+      loader: 'babel-loader',
+      options: babelOptions(),
+    },
+  ];
+
+  if (isDev) {
+    loaders.push('eslint-loader');
+  }
+  return loaders;
+};
+
+const plugins = () => {
+  const base = [
+    new HtmlWebpackPlugin({
+      template: './index.html',
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+    }),
+    new CopyPlugin({
+      patterns: [{ from: './images', to: './images' }],
+    }),
+  ];
+
+  if (isProd) {
+    base.push(new BundleAnalyzerPlugin());
+  }
+
+  return base;
+};
+
+const optimization = () => {
+  const config = {
+    splitChunks: {
+      chunks: 'all',
+    },
+  };
+
+  if (isProd) {
+    config.minimizer = [new CssMinimizerPlugin(), new TerserPlugin()];
+  }
 };
 
 module.exports = {
@@ -24,6 +92,13 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
+  resolve: {
+    extensions: ['.js', '.json', '.png'],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+  optimization: optimization(),
   devServer: {
     port: 3000,
     open: true,
@@ -31,22 +106,41 @@ module.exports = {
     compress: true,
     historyApiFallback: true,
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './index.html',
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-    }),
-    new CopyPlugin({
-      patterns: [{ from: './images', to: './images' }],
-    }),
-  ],
+  plugins: plugins(),
   module: {
     rules: [
       {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: jsLoaders(),
+      },
+      {
         test: /\.css$/,
         use: cssLoaders(),
+      },
+      {
+        test: /\.(jpg|png|gif|svg)$/,
+        use: ['file-loader'],
+      },
+      {
+        test: /\.(ttf|woff|woff2|eot)$/,
+        use: ['file-loader'],
+      },
+      {
+        test: /\.xml$/,
+        use: ['xml-loader'],
+      },
+      {
+        test: /\.csv$/,
+        use: ['csv-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: cssLoaders('sass-loader'),
+      },
+      {
+        test: /\.less$/,
+        use: cssLoaders('less-loader'),
       },
     ],
   },
